@@ -16,21 +16,12 @@ export default function DropdownMenu() {
 
   return (
     <div ref={dropdownRef}>
-      <Dropdown
-        arrowIcon={false}
-        inline
-        size="lg"
-        className="w-50 rounded-xl border-none p-2"
-        label={
-          <button
-            className="text-blue-900"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-          >
+      <Dropdown arrowIcon={false} inline size="lg" className="w-50 rounded-xl border-none p-2" label={
+          <span className="text-blue-900 cursor-pointer" aria-expanded={isOpen} aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}>
             {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          </span>
         }
+        onClick={() => setIsOpen(!isOpen)}
       >
         <DropdownItem as={Link} href="/brasil" onClick={() => setIsOpen(false)}>
           Brasil
@@ -44,21 +35,13 @@ export default function DropdownMenu() {
 
         <DropdownDivider />
 
-        <DropdownItem
-          as={Link}
-          href="/tecnologia"
-          onClick={() => setIsOpen(false)}
-        >
+        <DropdownItem as={Link} href="/tecnologia" onClick={() => setIsOpen(false)}>
           Tecnologia
         </DropdownItem>
 
         <DropdownDivider />
 
-        <DropdownItem
-          as={Link}
-          href="/esportes"
-          onClick={() => setIsOpen(false)}
-        >
+        <DropdownItem as={Link} href="/esportes" onClick={() => setIsOpen(false)}>
           Esportes
         </DropdownItem>
       </Dropdown>
