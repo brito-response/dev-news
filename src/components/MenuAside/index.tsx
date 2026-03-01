@@ -16,7 +16,7 @@ export const MenuAside: React.FC = () => {
     { icon: <FileEditIcon size={24} />, title: "Posts", url: "/posts" },
     { icon: <FolderTreeIcon size={24} />, title: "Categorias", url: "/categories" },
     { icon: <MessageCircleIcon size={24} />, title: "Mensagens", url: "/messages" },
-    { icon: <UserIcon size={24} />, title: "Portifolio", url: "/portifolios" },
+    { icon: <UserIcon size={24} />, title: "profile", url: "/profile" },
     { icon: <SettingsIcon size={24} />, title: "Setting", url: "/settings" },
   ];
 
