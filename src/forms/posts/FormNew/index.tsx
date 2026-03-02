@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { InputCustom } from '@/components/Inputs/InputCustom';
 import { formSchema, FormSchemaType } from './form-scheme';
 import { InputRichTextEditor } from '@/components/Inputs/InputRichTextEditor';
+import { delay } from '@/utils/utils';
 
 export const FormNewPost = () => {
   const router = useRouter();
@@ -29,9 +30,9 @@ export const FormNewPost = () => {
       if (response.status === 201 && Boolean(post.postId) && photoFile) {
         const formData = new FormData();
         formData.append("photo", photoFile, photoFile.name);
-
+        toast.success("encaminhando imagem ...");
+        await delay(3000);
         const uploadResp = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/images/posts/${post.postId}`, { method: "POST", body: formData });
-
         if (uploadResp.ok) {
           toast.success("Resource created successfully!");
           router.refresh();

@@ -53,7 +53,7 @@ export default async function PostsPage() {
                 </div>
               </div>
               <Link href={`/posts/${post.postId}/edit`} >editar</Link>
-               <Link href={`/post/${post.postId}/delete`} >editar</Link>
+              <Link href={`/post/${post.postId}/delete`} >excluir</Link>
             </article>
           ))}
         </section>

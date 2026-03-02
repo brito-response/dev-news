@@ -9,50 +9,50 @@ import { Post } from "@/utils/models/posts";
 import { formSchema, FormSchemaType } from "./form-scheme";
 import { InputCustom } from "@/components/Inputs/InputCustom";
 import { InputRichTextEditor } from "@/components/Inputs/InputRichTextEditor";
+import { delay } from "@/utils/utils";
 
 type FormEditPostProps = { post: Post; };
-
 export const FormEditPost: React.FC<FormEditPostProps> = ({ post }) => {
   const router = useRouter();
   const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(post.image ?? null);
-  const methods = useForm<any>({
+  const [photoPreview, setPhotoPreview] = useState<string | null>(post.image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${post.image}` : null);
+  const methods = useForm<FormSchemaType>({
     resolver: yupResolver(formSchema), mode: "onChange",
-    defaultValues: { title: post.title, content: post.content, status: post.status, image: post.image },
+    defaultValues: { title: post.title, content: post.content, status: post.status },
   });
 
-  const { handleSubmit, watch, formState: { isValid, isSubmitting, dirtyFields } } = methods;
+  const { handleSubmit, watch, formState: { isSubmitting } } = methods;
   const titlePreview = watch("title");
-
   const onSubmit = async (data: FormSchemaType) => {
-    const payload = Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== undefined && dirtyFields[key as keyof FormSchemaType]));
+    const payload = Object.fromEntries(Object.entries(data).filter(([_, value]) => value !== undefined));
     if (Object.keys(payload).length === 0 && !photoFile) {
       toast.info("Nenhuma alteração para salvar");
       return;
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/Posts/${post.postId}`, {
-        method: "Post",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/posts/${post.postId}`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        toast.error("Erro ao atualizar o post");
-        return;
-      }
+      if (!response.ok) { toast.error("Erro ao atualizar o post"); return; };
 
       if (photoFile) {
         const formData = new FormData();
-        formData.append("photo", photoFile);
-        const uploadResp = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/images/Posts/${post.postId}`, { method: "Post", body: formData });
+        formData.append("photo", photoFile, photoFile.name);
+        await delay(3000);
+        const uploadResp = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/images/posts/${post.postId}`, { method: "POST", body: formData });
         if (!uploadResp.ok) {
-          toast.warning("Post salvo, mas a imagem não foi atualizada");
+          toast.warning("os dados do post foram salvos, mas a imagem não foi possivel carregar e atualizar, tente novamente...");
+          router.refresh();
+          return;
         }
       }
+
       toast.success("Post atualizado com sucesso!");
-      router.refresh();
+      router.push("/manager")
     } catch {
       toast.error("Erro ao comunicar com o servidor");
     }
@@ -60,6 +60,9 @@ export const FormEditPost: React.FC<FormEditPostProps> = ({ post }) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
+    if (photoPreview?.startsWith("blob:")) {
+      URL.revokeObjectURL(photoPreview);
+    }
     setPhotoFile(file);
     if (file) {
       setPhotoPreview(URL.createObjectURL(file));
@@ -68,9 +71,7 @@ export const FormEditPost: React.FC<FormEditPostProps> = ({ post }) => {
 
   useEffect(() => {
     return () => {
-      if (photoPreview?.startsWith("blob:")) {
-        URL.revokeObjectURL(photoPreview);
-      }
+      if (photoPreview?.startsWith("blob:")) URL.revokeObjectURL(photoPreview);
     };
   }, [photoPreview]);
 
@@ -81,12 +82,12 @@ export const FormEditPost: React.FC<FormEditPostProps> = ({ post }) => {
           {titlePreview || "Prévia do título do Post"}
         </h1>
         <InputCustom name="title" label="Título do Post" />
-        {photoPreview && (<img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${photoPreview}`} className="h-64 w-full object-cover rounded-lg" alt="Prévia" />)}
+        {photoPreview && (<img src={photoPreview} className="h-64 w-full object-cover rounded-lg" alt="Prévia" />)}
 
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <InputRichTextEditor name="content" label="Conteúdo" placeholder="Atualize o conteúdo do Post..." />
 
-        <button type="submit" disabled={!isValid || isSubmitting} className="bg-blue-700 text-white px-6 py-2 rounded-md disabled:opacity-50"> Salvar
+        <button type="submit" disabled={isSubmitting} className="bg-blue-700 text-white px-6 py-2 rounded-md disabled:opacity-50"> Salvar
         </button>
       </form>
     </FormProvider>
