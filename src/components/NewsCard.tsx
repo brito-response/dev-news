@@ -1,27 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import { News } from "@/types/news";
+import { PostHilight } from "@/utils/models/posthilight";
 
-type Props = {
-  news: News;
-};
+type Props = { news: PostHilight; };
 
-export default function NewsCard({ news }: Props) {
+export const NewsCard = ({ news }: Props) => {
+  const formUrlImage = (basicUrl?: string): string => basicUrl ? `${process.env.NEXT_BACKEND_URL}${basicUrl}` : `${process.env.NEXT_FRONTEND_URL}/default-post.png`;
+
   return (
     <article className="group border border-gray-300 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white">
-
       <div className="relative w-full h-44 overflow-hidden">
-        <Image
-          src={news.image}
-          alt={news.title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        <Image src={formUrlImage(news.image) || ""} alt={news.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
 
       <div className="p-4 space-y-2">
         <span className="text-xs font-bold uppercase text-red-600">
-          {news.category}
+          {news.categories.map(category => category.name)}
         </span>
 
         <h3 className="font-bold leading-snug line-clamp-2">
@@ -29,13 +24,10 @@ export default function NewsCard({ news }: Props) {
         </h3>
 
         <p className="text-sm text-gray-600 line-clamp-2">
-          {news.subtitle}
+          {news.title}
         </p>
 
-        <Link
-          href={`/noticia/${news.id}`}
-          className="inline-block text-sm font-semibold border-b border-transparent hover:border-black transition-all"
-        >
+        <Link href={`/noticia/${news.postId}`} className="inline-block text-sm font-semibold border-b border-transparent hover:border-black transition-all">
           Ler mais →
         </Link>
       </div>
