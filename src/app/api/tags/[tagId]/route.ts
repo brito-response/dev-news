@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ tagId:
         const token = (await cookieStore).get("jwt_back");
         let jwt = !token ? "not found" : token.value;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/posts/${postId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tags/${tagId}`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${jwt}`,

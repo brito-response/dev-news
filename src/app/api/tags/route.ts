@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decoderTokenToClaims } from "../auth/decode-claims";
-import { PostInDto } from "@/utils/models/posts";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 
@@ -22,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 Authorization: `Bearer ${jwt}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ...body, userId: user?.id } as unknown as PostInDto),
+            body: JSON.stringify({ ...body, userId: user?.id }),
         });
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.includes("application/json") && response.status === 201) {

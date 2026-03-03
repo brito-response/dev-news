@@ -9,4 +9,3 @@ export const formSchema = yup.object({
 });
 
 export type FormSchemaType = yup.Asserts<typeof formSchema>;
-

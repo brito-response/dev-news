@@ -8,13 +8,7 @@ export default function Hero() {
   return (
     <section className="w-full">
       <div className="relative w-full h-105 md:h-130 rounded-2xl overflow-hidden">
-        <Image
-          src={news.image}
-          alt="Manchete principal"
-          fill
-          priority
-          className="object-cover transition-transform duration-700 hover:scale-105"
-        />
+        <Image src={news.image} alt="Manchete principal" fill priority className="object-cover transition-transform duration-700 hover:scale-105"/>
 
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-end">
@@ -23,18 +17,15 @@ export default function Hero() {
               {news.category}
             </span>
 
-            <h1 className="text-2xl md:text-4xl font-bold leading-tight mb-3">
+            <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-3">
               {news.title}
-            </h1>
+            </h2>
 
             <p className="text-sm md:text-base text-gray-200 mb-4">
               {news.description}
             </p>
 
-            <Link
-              href={`/noticia/${news.id}`}
-              className="inline-block font-semibold border-b border-transparent hover:border-white transition-all duration-300"
-            >
+            <Link href={`/noticia/${news.id}`} className="inline-block font-semibold border-b border-transparent hover:border-white transition-all duration-300">
               Ler matéria completa →
             </Link>
           </div>

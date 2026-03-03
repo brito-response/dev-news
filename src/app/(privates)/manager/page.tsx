@@ -17,11 +17,7 @@ export default async function Manager() {
 
       {/* SEARCH */}
       <section className="max-w-4xl mx-auto px-6 mb-16">
-        <input
-          type="text"
-          placeholder="Buscar artigos..."
-          className="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        />
+        <input type="text" placeholder="Buscar artigos..." className="w-full bg-white border border-gray-200 rounded-2xl px-6 py-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
       </section>
 
       <section className="max-w-7xl mx-auto px-6 pb-24">

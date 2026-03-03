@@ -5,22 +5,25 @@ import { LayoutCaptureError } from "@/components/Layouts/LayoutCaptureError";
 import { ManagerLayout } from "@/components/Layouts/ManagerLayout";
 import { MenuAside } from "@/components/MenuAside";
 import { MenuProvider } from "@/contexts/manager-context";
+import { Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
-      <div data-testid="root-layout-private">
-        <MenuProvider>
-          <ManagerLayout>
-            <Header />
-            <ToastContainer position="top-center" />
-            <MenuAside />
+    <div data-testid="root-layout-private">
+      <MenuProvider>
+        <ManagerLayout>
+          <Header />
+          <ToastContainer position="top-center" />
+          <MenuAside />
+          <Suspense fallback={null}>
             <LayoutCaptureError>
               {children}
             </LayoutCaptureError>
-            <Footer />
-          </ManagerLayout>
-        </MenuProvider>
-      </div>
+          </Suspense>
+          <Footer />
+        </ManagerLayout>
+      </MenuProvider>
+    </div>
   );
 }

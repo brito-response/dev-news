@@ -10,7 +10,7 @@ async function getposts(): Promise<Post[]> {
   if (!response.ok) return [];
   const posts: Post[] = await response.json();
   return posts;
-}
+};
 
 export default async function PostsPage() {
   const posts: Post[] = await getposts();
@@ -52,8 +52,10 @@ export default async function PostsPage() {
 
                 </div>
               </div>
-              <Link href={`/posts/${post.postId}/edit`} >editar</Link>
-              <Link href={`/post/${post.postId}/delete`} >excluir</Link>
+              <div className="flex items-center justify-around">
+                <Link href={`/posts/${post.postId}/edit`} >editar</Link>
+                <Link href={`/posts/${post.postId}/delete`} >excluir</Link>
+              </div>
             </article>
           ))}
         </section>
